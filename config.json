@@ -1,0 +1,7 @@
+{
+	"rally_url" : "https://rally1.rallydev.com/slm",
+    "api_key" : "",
+    "username" : "",
+    "password" : "",
+	"output_filename" : "workspace_admins.csv"
+}
