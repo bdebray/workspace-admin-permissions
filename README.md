@@ -1,4 +1,4 @@
-# Agile Central: Workspace Admin Permissions Exporte
+# Agile Central: Workspace Admin Permissions Export
 
 This script will retrieve a list of all Workspace Administrators and export to a csv file. The list retrieved will be based on the user permissions for the provided username/password or API Key. This is best run as a subscription administrator in order to retrieve permissions for all workspaces in a subscription.
 
