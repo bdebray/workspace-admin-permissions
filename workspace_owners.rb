@@ -32,6 +32,7 @@ class RallyWorkspaceOwners
 		@rally = RallyAPI::RallyRestJson.new(config)
 
 		@csv_file_name 		= config_hash['output_filename']
+        @exclude_closed_workspaces = config_hash['exclude_closed_workspaces']
 
 		# Logger ------------------------------------------------------------
 		@logger 			= Logger.new('./workspace_owners.log')
@@ -80,13 +81,13 @@ class RallyWorkspaceOwners
 	def run
         start_time = Time.now
 
-        workspaces = find_subscription_workspaces.reject { |ws| ws['State'] == 'Closed' }
+        workspaces = @exclude_closed_workspaces ? find_subscription_workspaces.reject { |ws| ws['State'] == 'Closed' } : find_subscription_workspaces
 
-        print "Found #{workspaces.length} open workspaces\n"
-        @logger.info "Found #{workspaces.length} open workspaces\n"
+        print "Found #{workspaces.length} workspaces\n"
+        @logger.info "Found #{workspaces.length} workspaces\n"
 
         CSV.open(@csv_file_name, "wb") do |csv|
-          csv << ["WorkspaceName","Owner","LastName","FirstName","EmailAddress"]
+          csv << ["WorkspaceName","State","Owner","LastName","FirstName","EmailAddress"]
 
         workspaces.each { |workspace|
             user = workspace["Owner"].nil? ? nil : find_user(workspace["Owner"]._refObjectUUID)
@@ -107,7 +108,7 @@ class RallyWorkspaceOwners
 				end
             end
 
-            csv << [workspace["Name"],userdisplay,lastname,firstname,emaildisplay]
+            csv << [workspace["Name"],workspace['State'],userdisplay,lastname,firstname,emaildisplay]
             }
         end
         print "Finished: elapsed time #{'%.1f' % ((Time.now - start_time)/60)} minutes."

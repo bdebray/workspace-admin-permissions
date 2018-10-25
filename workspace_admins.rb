@@ -32,6 +32,7 @@ class RallyWorkspaceAdmins
 		@rally = RallyAPI::RallyRestJson.new(config)
         
 		@csv_file_name 		= config_hash['output_filename']
+        @exclude_closed_workspaces = config_hash['exclude_closed_workspaces']
 
 		# Logger ------------------------------------------------------------
 		@logger 			= Logger.new('./workspace_permissions.log')
@@ -40,10 +41,18 @@ class RallyWorkspaceAdmins
 	end
 
     def find_workspace_admins
+        
+        user_filter = "((Role = \"Admin\") AND (User.Disabled = \"false\"))"
+        
         query = RallyAPI::RallyQuery.new()
         query.type = "workspacepermission"
         query.fetch = "Name,Workspace,User,Role"
-        query.query_string = "(((Role = \"Admin\") AND (Workspace.State = \"Open\")) AND (User.Disabled = \"false\"))"
+        
+        if @exclude_closed_workspaces
+            query.query_string = "(#{user_filter} AND (Workspace.State = \"Open\"))"
+        else
+            query.query_string = user_filter
+        end
         
         return @rally.find(query)
     end

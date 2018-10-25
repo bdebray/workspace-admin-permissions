@@ -17,6 +17,7 @@ Ensure ruby is installed. The script requires the following gems:
 2. Update the config.json file:
    - Specify a username and password or an API Key (Read-Only is sufficient)
    - Update the default filename to a new one, if desired
+   - Set **exclude_closed_workspaces** to *true* to export data for open workspaces only or *false* for all workspaces (The default is *true*)
 3. Open terminal/console, navigate to the downloaded/cloned directory and run:
    - `ruby workspace_admins.rb config.json` for an export of Workspace Administrators
    - `ruby workspace_owners.rb config.json` for an export of open Workspaces and their owners

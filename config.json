@@ -3,5 +3,6 @@
     "api_key" : "",
     "username" : "",
     "password" : "",
-	"output_filename" : "workspace_admins.csv"
+	"output_filename" : "workspace_admins.csv",
+    "exclude_closed_workspaces" : true
 }
